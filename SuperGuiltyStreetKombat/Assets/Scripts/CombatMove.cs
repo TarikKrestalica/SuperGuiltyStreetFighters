@@ -1,19 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Windows;
 
 // Help with creating the asset menu: https://www.youtube.com/watch?v=aPXvoWVabPY
 
+// Each move will have an associated animation in sequential order.
 [CreateAssetMenu(fileName = "CombatMove", menuName = "Move")]
 public class CombatMove : ScriptableObject
 {
     [Range(1, 9f)]
-    [SerializeField] List<int> keys;
+    public List<int> keys;
 
-    public bool MovePerformed()
+    public bool MovePerformed(string input)
     {
-        return true;
+        string combo = "";
+        for (int i = 0; i < keys.Count; i++)
+        {
+            combo += keys[i];
+        }
+
+        if (input == combo)  // Check for match, perform some animation
+            return true;
+
+        return false;
     }
-
-
 }
