@@ -42,4 +42,15 @@ public class CombatMove : ScriptableObject
 
         return false;
     }
+
+    public string GetMoveInString()
+    {
+        string combo = "";
+        for (int i = 0; i < keys.Count; i++)
+        {
+            combo += keys[i];
+        }
+
+        return combo;
+    }
 }

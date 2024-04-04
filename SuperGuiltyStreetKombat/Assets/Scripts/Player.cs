@@ -191,6 +191,11 @@ public class Player : MonoBehaviour
     void PerformMove()
     {
         CombatMove move = GameManager.moveManager.GetCombatMove(moveCombo);
+        if (!move)
+        {
+            return;
+        }
+
         Debug.Log("Move performed is: " + move.name);
         moveCombo = "";
     }
