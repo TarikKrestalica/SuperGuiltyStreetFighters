@@ -12,6 +12,8 @@ public class CombatMove : ScriptableObject
     [Range(1, 9f)]
     public List<int> keys;
 
+    [SerializeField] char character;
+
     public bool MovePerformed(string input)
     {
         string combo = "";
@@ -20,6 +22,21 @@ public class CombatMove : ScriptableObject
             combo += keys[i];
         }
 
+        if (input == combo)  // Check for match, perform some animation
+            return true;
+
+        return false;
+    }
+
+    public bool SpecialMovePerformed(string input)
+    {
+        string combo = "";
+        for (int i = 0; i < keys.Count; i++)
+        {
+            combo += keys[i];
+        }
+
+        combo += character;
         if (input == combo)  // Check for match, perform some animation
             return true;
 

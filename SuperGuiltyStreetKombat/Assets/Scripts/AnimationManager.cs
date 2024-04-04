@@ -15,6 +15,6 @@ public class AnimationManager : MonoBehaviour
 
     public void PlayAnimation(int index)
     {
-        Debug.Log("Play animation number " + index);
+        
     }
 }

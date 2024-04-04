@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: ReverseDragonPunch
   m_EditorClassIdentifier: 
   keys: 040000000200000001000000
+  character: 65

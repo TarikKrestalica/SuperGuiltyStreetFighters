@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: QuarterCircleForward
   m_EditorClassIdentifier: 
   keys: 020000000300000006000000
+  character: 112

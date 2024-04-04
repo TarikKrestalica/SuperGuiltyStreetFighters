@@ -6,8 +6,8 @@ using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] string moveCombo;
-
+    [SerializeField] private string moveCombo;
+    string tempCombo;
     [Header("Movement System")]
     Vector3 horVel;
     [Range(1, 100f)]
@@ -23,6 +23,15 @@ public class Player : MonoBehaviour
 
     [Header("AnimationManager")]
     private AnimationManager animationManager;
+
+    [Header("Time Delays")]
+    [Range(0f, 3f)]
+    [SerializeField] float timeDelayBetweenMove;
+    [Range(0f, 3f)]
+    [SerializeField] float timeDelayBetweenInput;
+
+    float currentTimePassed = 0f;
+    bool inWaitingState = false;
 
     private void Start()
     {
@@ -55,6 +64,24 @@ public class Player : MonoBehaviour
             return;
         }
 
+        if (inWaitingState)
+        {
+            if(currentTimePassed < timeDelayBetweenMove)
+            {
+                if (currentTimePassed != 0f)
+                {
+                    moveCombo += Input.inputString;
+                }
+
+                currentTimePassed += Time.deltaTime;
+                return;
+            }
+
+            currentTimePassed = 0f;
+            PerformMove();
+            inWaitingState = false;
+        }
+
         RunMovementLogic();
         RunJumpingLogic();
         RunInputLogic();
@@ -81,6 +108,26 @@ public class Player : MonoBehaviour
 
     void RunInputLogic()
     {
+        if (moveCombo.Length > 0)  // Check for time pass in between and constraint with sequence of keys
+        {
+            if (Input.anyKeyDown)
+            {
+                currentTimePassed = 0f;
+            }
+            else
+            {
+                if (currentTimePassed < timeDelayBetweenInput && moveCombo.Length <= 6)
+                {
+                    currentTimePassed += Time.deltaTime;
+                }
+                else if (currentTimePassed >= timeDelayBetweenInput || moveCombo.Length > 6)
+                {
+                    currentTimePassed = 0f;
+                    moveCombo = "";
+                }
+            }
+        }
+
         if (!Input.anyKeyDown)
             return;
 
@@ -95,9 +142,9 @@ public class Player : MonoBehaviour
             return;
         }
 
-        PerformMove(moveCombo);
-        moveCombo = "";
+        inWaitingState = true;
     }
+
 
     // Keep track of input as the player performs the combo move
     int GetKeyPressed(string input)
@@ -141,10 +188,11 @@ public class Player : MonoBehaviour
         }
     }
 
-    void PerformMove(string literal)
+    void PerformMove()
     {
-        CombatMove move = GameManager.moveManager.GetCombatMove(literal);
-        Debug.Log("Move performed is: " + move);
+        CombatMove move = GameManager.moveManager.GetCombatMove(moveCombo);
+        Debug.Log("Move performed is: " + move.name);
+        moveCombo = "";
     }
 
     public bool IsGrounded()
