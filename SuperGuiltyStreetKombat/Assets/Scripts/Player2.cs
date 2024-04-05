@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class Player : MonoBehaviour
+public class Player2 : MonoBehaviour
 {
     [SerializeField] private string moveCombo;
     string tempCombo;
@@ -89,12 +89,12 @@ public class Player : MonoBehaviour
 
     void RunMovementLogic()
     {
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow))
+        if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
         {
             horVel = this.transform.right * Input.GetAxis("Horizontal");
             transform.Translate(horVel * speed * Time.deltaTime, Space.World);
         }
-       
+     
         
     }
 
