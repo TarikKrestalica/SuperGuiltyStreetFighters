@@ -94,13 +94,11 @@ public class Player2 : MonoBehaviour
             horVel = this.transform.right * Input.GetAxis("Horizontal");
             transform.Translate(horVel * speed * Time.deltaTime, Space.World);
         }
-     
-        
     }
 
     void RunJumpingLogic()
     {
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             if(!IsGrounded())
             {
