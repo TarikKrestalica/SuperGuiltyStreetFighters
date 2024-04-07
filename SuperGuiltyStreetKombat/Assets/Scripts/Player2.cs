@@ -153,12 +153,47 @@ public class Player2 : MonoBehaviour
     // Keep track of input as the player performs the combo move
     int GetKeyPressed(string input)
     {
-        if(!int.TryParse(input, out int number))
+        switch (input)
         {
-            return -1;
-        }
+            case "q":
+            case "Q":
+                return 1;
 
-        return number;
+            case "w":
+            case "W":
+                return 2;
+
+            case "e":
+            case "E":
+                return 3;
+
+            case "r":
+            case "R":
+                return 4;
+
+            case "t":
+            case "T":
+                return 5;
+
+            case "y":
+            case "Y":
+                return 6;
+
+            case "u":
+            case "U":
+                return 7;
+
+            case "i":
+            case "I":
+                return 8;
+
+            case "o":
+            case "O":
+                return 9;
+
+            default:
+                return -1;
+        }
     }
 
     void PerformMove()
