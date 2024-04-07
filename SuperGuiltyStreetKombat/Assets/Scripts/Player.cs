@@ -21,9 +21,6 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform groundCheckTransform;
     public LayerMask playerMask;
 
-    [Header("AnimationManager")]
-    private AnimationManager animationManager;
-
     [Header("Time Delays")]
     [Range(0f, 3f)]
     [SerializeField] float timeDelayBetweenMove;
@@ -32,6 +29,10 @@ public class Player : MonoBehaviour
 
     float currentTimePassed = 0f;
     bool inWaitingState = false;
+
+    [Header("Animation Systems")]
+    private Animator system;
+
 
     private void Start()
     {
@@ -46,10 +47,11 @@ public class Player : MonoBehaviour
             Debug.LogError("Rigidbody 2D component can't be found!");
             return false;
         }
-        animationManager = GetComponent<AnimationManager>();
-        if (!animationManager)
+
+        system = GetComponent<Animator>();
+        if (!system)
         {
-            Debug.LogError("Animation Manager component can't be found!");
+            Debug.LogError("Animator can't be found!");
             return false;
         }
 
@@ -91,17 +93,16 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow))
         {
-            horVel = this.transform.right * Input.GetAxis("Horizontal");
+            horVel = -this.transform.right * Input.GetAxis("Horizontal");
             transform.Translate(horVel * speed * Time.deltaTime, Space.World);
-        }
-       
-        
+        }  
     }
 
     void RunJumpingLogic()
     {
         if (Input.GetButtonDown("Jump"))
         {
+            Debug.Log(IsGrounded());
             if(!IsGrounded())
             {
                 return;
@@ -159,38 +160,7 @@ public class Player : MonoBehaviour
             return -1;
         }
 
-        // Link number to right number
-        switch (number)
-        {
-            case 1:
-                animationManager.PlayAnimation(1);
-                return 1;
-            case 2:
-                animationManager.PlayAnimation(2);
-                return 2;
-            case 3:
-                animationManager.PlayAnimation(3);
-                return 3;
-            case 4:
-                animationManager.PlayAnimation(4);
-                return 4;
-            case 5:
-                animationManager.PlayAnimation(5);
-                return 5;
-            case 6:
-                animationManager.PlayAnimation(6);
-                return 6;
-            case 7:
-                animationManager.PlayAnimation(7);
-                return 7;
-            case 8:
-                animationManager.PlayAnimation(8);
-                return 8;
-            case 9:
-                animationManager.PlayAnimation(9);
-                return 9;
-            default: return -1;
-        }
+        return number;
     }
 
     void PerformMove()
@@ -202,11 +172,18 @@ public class Player : MonoBehaviour
         }
 
         Debug.Log("Move performed is: " + move.name);
+        if (GetComponent<AnimationManager>().IsThereAnimationClip(move.name))
+        {
+            AnimationControl animationControl = GetComponent<AnimationManager>().GetAnimation(move.name);
+            system.SetBool(animationControl.parameter, true);
+            system.Play(move.name);
+            system.SetBool(animationControl.parameter, false);
+        }
         moveCombo = "";
     }
 
     public bool IsGrounded()
     {
-        return Physics2D.OverlapBox(groundCheckTransform.position, new Vector2(1, 0.08f), 0, playerMask);
+        return Physics2D.OverlapBox(groundCheckTransform.position, new Vector2(2, 0.1f), 0, playerMask);
     }
 }
