@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
@@ -32,11 +33,25 @@ public class Player : MonoBehaviour
 
     [Header("Animation Systems")]
     private Animator system;
+    private AnimationManager animManager;
 
+    [Header("HealthSystem")]
+    float startingHealth = 100;
+    float currentHealth;
+    [SerializeField] TMP_Text health_Text;
+
+
+    [Header("MoveRandomizerSystem")]
+    [SerializeField] TMP_Text move_Text;
+    [SerializeField] CombatMove chosen;
+    [SerializeField] string moveName;
+    [SerializeField] string hashed;
 
     private void Start()
     {
         GetComponents();
+        SetHealth(startingHealth);
+        SetUpMoveToType();
     }
 
     bool GetComponents()
@@ -55,7 +70,29 @@ public class Player : MonoBehaviour
             return false;
         }
 
+        animManager = GetComponent<AnimationManager>();
+        if (!animManager)
+        {
+            Debug.LogError("Animation Manager can't be found!");
+            return false;
+        }
+
         return true;
+    }
+
+    void SetUpMoveToType()
+    {
+        if (!animManager)
+        {
+            Debug.LogError("Animation Manager can't be found!");
+            return;
+        }
+
+        move_Text.gameObject.SetActive(true);
+        moveName = animManager.ChooseRandomAnimation();
+        chosen = GameManager.moveManager.GetMove(moveName);
+        hashed = chosen.GetMoveInString();
+        move_Text.text = $"{moveName} : {hashed}";
     }
 
     // Reading input from keyboard: https://docs.unity3d.com/ScriptReference/Input.html
@@ -137,18 +174,21 @@ public class Player : MonoBehaviour
         if (!Input.anyKeyDown)
             return;
 
-        if (GetKeyPressed(Input.inputString) == -1)
+        if(int.TryParse(Input.inputString, out int number))
         {
-            return;
+            if (GetKeyPressed(Input.inputString) == -1)
+            {
+                return;
+            }
         }
-
+        
         moveCombo += Input.inputString;
-        if (!GameManager.moveManager.isThereComboMove(moveCombo))
+        if (moveCombo == hashed)
         {
-            return;
+            inWaitingState = true;
         }
 
-        inWaitingState = true;
+        
     }
 
 
@@ -171,6 +211,7 @@ public class Player : MonoBehaviour
             return;
         }
 
+        move_Text.gameObject.SetActive(false);
         Debug.Log("Move performed is: " + move.name);
         if (GetComponent<AnimationManager>().IsThereAnimationClip(move.name))
         {
@@ -179,11 +220,44 @@ public class Player : MonoBehaviour
             system.Play(move.name);
             system.SetBool(animationControl.parameter, false);
         }
+
+        Hit();
         moveCombo = "";
+        SetUpMoveToType();
     }
 
     public bool IsGrounded()
     {
         return Physics2D.OverlapBox(groundCheckTransform.position, new Vector2(2, 0.1f), 0, playerMask);
+    }
+
+    void Hit()
+    {
+        Player2 attackedPlayer = GameObject.FindGameObjectWithTag("Player2").GetComponent<Player2>();
+        if (!attackedPlayer)
+        {
+            Debug.LogError("No player 2 component found!");
+            return;
+        }
+
+        attackedPlayer.TakeDamage(10);
+
+    }
+
+    public void TakeDamage(float value)
+    {
+        currentHealth -= value;
+        SetHealth(currentHealth);
+    }
+
+    public void SetHealth(float currentValue)
+    {
+        currentHealth = currentValue;
+        health_Text.text = $"Health: {currentHealth}";
+    }
+
+    public float GetHealth()
+    {
+        return currentHealth;
     }
 }

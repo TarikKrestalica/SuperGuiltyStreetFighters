@@ -51,6 +51,7 @@ public class CombatMove : ScriptableObject
             combo += keys[i];
         }
 
+        combo += character;
         return combo;
     }
 }

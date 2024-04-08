@@ -12,6 +12,7 @@ public class AnimationControl
 public class AnimationManager : MonoBehaviour
 {
     [SerializeField] List<AnimationControl> animationInputs;
+    private System.Random rnd = new System.Random();
 
     public bool IsThereAnimationClip(string name)
     {
@@ -34,6 +35,12 @@ public class AnimationManager : MonoBehaviour
         }
 
         return null;
+    }
+
+    public string ChooseRandomAnimation()
+    {
+        int index = rnd.Next(0, animationInputs.Count);
+        return animationInputs[index].clip.name;
     }
 
 }
