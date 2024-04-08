@@ -43,6 +43,7 @@ public class Player : MonoBehaviour
 
     [Header("MoveRandomizerSystem")]
     [SerializeField] TMP_Text move_Text;
+    [SerializeField] TMP_Text curTyped_Text;
     [SerializeField] CombatMove chosen;
     [SerializeField] string moveName;
     [SerializeField] string hashed;
@@ -120,37 +121,12 @@ public class Player : MonoBehaviour
             PerformMove();
             inWaitingState = false;
         }
-
-        RunMovementLogic();
-        RunJumpingLogic();
         RunInputLogic();
-    }
-
-    void RunMovementLogic()
-    {
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow))
-        {
-            horVel = -this.transform.right * Input.GetAxis("Horizontal");
-            transform.Translate(horVel * speed * Time.deltaTime, Space.World);
-        }  
-    }
-
-    void RunJumpingLogic()
-    {
-        if (Input.GetButtonDown("Jump"))
-        {
-            Debug.Log(IsGrounded());
-            if(!IsGrounded())
-            {
-                return;
-            }
-
-            rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-        }
     }
 
     void RunInputLogic()
     {
+        curTyped_Text.text = $"Typed: {moveCombo}";
         if (moveCombo.Length > 0)  // Check for time pass in between and constraint with sequence of keys
         {
             if (Input.anyKeyDown)
@@ -174,7 +150,7 @@ public class Player : MonoBehaviour
         if (!Input.anyKeyDown)
             return;
 
-        if(int.TryParse(Input.inputString, out int number))
+        if(moveCombo.Length < hashed.Length - 1)
         {
             if (GetKeyPressed(Input.inputString) == -1)
             {
@@ -187,8 +163,6 @@ public class Player : MonoBehaviour
         {
             inWaitingState = true;
         }
-
-        
     }
 
 

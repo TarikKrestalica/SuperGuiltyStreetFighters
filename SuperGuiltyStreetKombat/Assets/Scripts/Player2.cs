@@ -43,6 +43,7 @@ public class Player2 : MonoBehaviour
 
     [Header("MoveRandomizerSystem")]
     [SerializeField] TMP_Text move_Text;
+    [SerializeField] TMP_Text curTyped_Text;
     [SerializeField] CombatMove chosen;
     [SerializeField] string hashed;
     [SerializeField] string moveName;
@@ -120,35 +121,12 @@ public class Player2 : MonoBehaviour
             inWaitingState = false;
         }
 
-        RunMovementLogic();
-        RunJumpingLogic();
         RunInputLogic();
-    }
-
-    void RunMovementLogic()
-    {
-        if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
-        {
-            horVel = -this.transform.right * Input.GetAxis("Horizontal");
-            transform.Translate(horVel * speed * Time.deltaTime, Space.World);
-        }
-    }
-
-    void RunJumpingLogic()
-    {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            if(!IsGrounded())
-            {
-                return;
-            }
-
-            rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-        }
     }
 
     void RunInputLogic()
     {
+        curTyped_Text.text = $"Typed: {moveCombo}";
         if (moveCombo.Length > 0)  // Check for time pass in between and constraint with sequence of keys
         {
             if (Input.anyKeyDown)
@@ -172,21 +150,26 @@ public class Player2 : MonoBehaviour
         if (!Input.anyKeyDown)
             return;
 
-        if (int.TryParse(Input.inputString, out int number))
+        if (moveCombo.Length < hashed.Length - 1)
         {
-            if (GetKeyPressed(Input.inputString) == -1)
+            int key = GetKeyPressed(Input.inputString);
+            if (key == -1)
             {
                 return;
             }
+            moveCombo += key;
+        }
+        else
+        {
+            moveCombo += Input.inputString;
         }
 
-        moveCombo += Input.inputString;
         if (moveCombo == hashed)
         {
-            return;
+            inWaitingState = true;
         }
 
-        inWaitingState = true;
+        
     }
 
 
