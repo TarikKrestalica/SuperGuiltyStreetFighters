@@ -20,4 +20,9 @@ public class StartGame : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
+
+    public void playercontrols()
+    {
+        SceneManager.LoadScene(3);
+    }
 }
