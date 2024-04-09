@@ -259,6 +259,12 @@ public class Player2 : MonoBehaviour
     {
         currentHealth -= value;
         SetHealth(currentHealth);
+
+        if (currentHealth == 0)
+        {
+            Debug.Log("Player 1 WINS");
+            SceneManager.LoadScene(5);
+        }
     }
 
     public void SetHealth(float currentValue)
@@ -277,13 +283,4 @@ public class Player2 : MonoBehaviour
         return Physics2D.OverlapBox(groundCheckTransform.position, new Vector2(2, 0.1f), 0, playerMask);
     }
 
-    public void Victory()
-    {
-        if (currentHealth == 0)
-        {
-            Debug.Log("Player 1 WINS");
-            SceneManager.LoadScene(5);
-            
-        }
-    }
 }

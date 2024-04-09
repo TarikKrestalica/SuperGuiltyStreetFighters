@@ -223,6 +223,12 @@ public class Player : MonoBehaviour
     {
         currentHealth -= value;
         SetHealth(currentHealth);
+
+        if (currentHealth == 0)
+        {
+            Debug.Log("Player 2 WINS");
+            SceneManager.LoadScene(4);
+        }
     }
 
     public void SetHealth(float currentValue)
@@ -236,13 +242,4 @@ public class Player : MonoBehaviour
         return currentHealth;
     }
 
-    public void Victory()
-    {
-        if (currentHealth == 0)
-        {
-            Debug.Log("Player 2 WINS");
-            SceneManager.LoadScene(4);
-            
-        }
-    }
 }
