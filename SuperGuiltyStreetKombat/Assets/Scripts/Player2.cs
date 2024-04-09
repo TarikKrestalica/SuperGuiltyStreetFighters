@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering.VirtualTexturing;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
 
 public class Player2 : MonoBehaviour
 {
@@ -267,7 +266,6 @@ public class Player2 : MonoBehaviour
 
         if (currentHealth == 0)
         {
-            Debug.Log("Player 1 WINS");
             SceneManager.LoadScene(5);
         }
     }

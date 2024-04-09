@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using TMPro;
-using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -100,11 +99,9 @@ public class Player : MonoBehaviour
     // Reading input from keyboard: https://docs.unity3d.com/ScriptReference/Input.html
     void Update()
     {
-        if (GameManager.gameManager.GameOver())
-        {
+        if (GameManager.gameManager.GameOver()) {
             return;
         }
-
         if (!GetComponents())
         {
             return;
@@ -228,12 +225,6 @@ public class Player : MonoBehaviour
     {
         currentHealth -= value;
         SetHealth(currentHealth);
-
-        if (currentHealth == 0)
-        {
-            Debug.Log("Player 2 WINS");
-            SceneManager.LoadScene(4);
-        }
     }
 
     public void SetHealth(float currentValue)
@@ -246,5 +237,4 @@ public class Player : MonoBehaviour
     {
         return currentHealth;
     }
-
 }

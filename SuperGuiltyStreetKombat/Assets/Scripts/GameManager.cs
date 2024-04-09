@@ -64,25 +64,6 @@ public class GameManager : MonoBehaviour
         gameManager = this;
     }
 
-    private void Update()
-    {
-        if(player.GetHealth() <= 0f || player2.GetHealth() <= 0f)
-        {
-            if (player.GetHealth() <= 0f)
-            {
-                winner = "Player 2 wins!";
-            }
-            else if(player2.GetHealth() <= 0f)
-            {
-                winner = "Player 1 wins!";
-            }
-
-            isGameOver = !isGameOver;
-            gameOverDisplay.SetActive(true);
-            gameOverText.text = winner;
-        }
-    }
-
     public bool GameOver()
     {
         return isGameOver;
