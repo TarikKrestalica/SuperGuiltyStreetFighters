@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,6 +21,21 @@ public class GameManager : MonoBehaviour
     }
 
     private Player m_player;
+
+    public static Player2 player2
+    {
+        get
+        {
+            if (gameManager.m_player2 == null)
+            {
+                gameManager.m_player2 = GameObject.FindGameObjectWithTag("Player2").GetComponent<Player2>();
+            }
+
+            return gameManager.m_player2;
+        }
+    }
+
+    private Player2 m_player2;
 
     public static MoveManager moveManager
     {

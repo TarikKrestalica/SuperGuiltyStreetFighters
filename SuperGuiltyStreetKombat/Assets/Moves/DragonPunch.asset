@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: DragonPunch
   m_EditorClassIdentifier: 
   keys: 060000000200000003000000
+  character: 112

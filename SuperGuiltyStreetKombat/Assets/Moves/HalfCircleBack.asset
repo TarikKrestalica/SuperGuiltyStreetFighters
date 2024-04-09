@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: HalfCircleBack
   m_EditorClassIdentifier: 
   keys: 0600000003000000020000000100000004000000
+  character: 107
