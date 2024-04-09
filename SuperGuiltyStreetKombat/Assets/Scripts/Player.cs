@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -233,5 +234,15 @@ public class Player : MonoBehaviour
     public float GetHealth()
     {
         return currentHealth;
+    }
+
+    public void Victory()
+    {
+        if (currentHealth == 0)
+        {
+            Debug.Log("Player 2 WINS");
+            SceneManager.LoadScene(4);
+            
+        }
     }
 }

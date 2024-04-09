@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering.VirtualTexturing;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class Player2 : MonoBehaviour
@@ -274,5 +275,15 @@ public class Player2 : MonoBehaviour
     public bool IsGrounded()
     {
         return Physics2D.OverlapBox(groundCheckTransform.position, new Vector2(2, 0.1f), 0, playerMask);
+    }
+
+    public void Victory()
+    {
+        if (currentHealth == 0)
+        {
+            Debug.Log("Player 1 WINS");
+            SceneManager.LoadScene(5);
+            
+        }
     }
 }
