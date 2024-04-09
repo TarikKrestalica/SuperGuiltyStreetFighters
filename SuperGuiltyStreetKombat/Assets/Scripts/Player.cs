@@ -100,6 +100,11 @@ public class Player : MonoBehaviour
     // Reading input from keyboard: https://docs.unity3d.com/ScriptReference/Input.html
     void Update()
     {
+        if (GameManager.gameManager.GameOver())
+        {
+            return;
+        }
+
         if (!GetComponents())
         {
             return;

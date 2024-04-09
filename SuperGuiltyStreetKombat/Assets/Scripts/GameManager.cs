@@ -2,10 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using TMPro;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager gameManager;
+    private bool isGameOver = false;
+    [SerializeField] GameObject gameOverDisplay;
+    [SerializeField] TMP_Text gameOverText;
+    string winner;
 
     public static Player player
     {
@@ -54,12 +61,35 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (gameManager != null)
-        {
-            Destroy(this);
-        }
-
         gameManager = this;
-        DontDestroyOnLoad(gameManager);
+    }
+
+    private void Update()
+    {
+        if(player.GetHealth() <= 0f || player2.GetHealth() <= 0f)
+        {
+            if (player.GetHealth() <= 0f)
+            {
+                winner = "Player 2 wins!";
+            }
+            else if(player2.GetHealth() <= 0f)
+            {
+                winner = "Player 1 wins!";
+            }
+
+            isGameOver = !isGameOver;
+            gameOverDisplay.SetActive(true);
+            gameOverText.text = winner;
+        }
+    }
+
+    public bool GameOver()
+    {
+        return isGameOver;
+    }
+
+    public void GoToScene(string name)
+    {
+        SceneManager.LoadScene(name);
     }
 }
